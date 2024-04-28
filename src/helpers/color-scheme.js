@@ -7,5 +7,5 @@ import * as colors from 'data/colors/colors.json'
  * @returns {string[]}
  */
 export const get = (name = 'material') => {
-  return colors[name];
+  return colors[name] || [];
 }
