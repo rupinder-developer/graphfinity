@@ -43,7 +43,7 @@ class Chart {
   /**
    * This method is used to set configuration related to chart animation.
    * 
-   * @param {Object} options 
+   * @param {object} options 
    * @returns {this}
    */
   animate(options = {}) {
@@ -59,7 +59,7 @@ class Chart {
   /**
    * This method is used to set legend configuration.
    * 
-   * @param {Object} options 
+   * @param {object} options 
    * @returns {this}
    */
   legend(options = {}) {
@@ -73,7 +73,7 @@ class Chart {
   /**
    * This method is used to set tooltip configuration
    * 
-   * @param {Object} options
+   * @param {object} options
    * @returns {this}
    */
   tooltip(options = {}) {
@@ -86,7 +86,7 @@ class Chart {
   
   /**
    * 
-   * @param {Object} data Instance of DataTable Class 
+   * @param {object} data Instance of DataTable Class 
    * @returns {this}
    */
   bind(data) {

@@ -1,6 +1,5 @@
 /**
  * Class Name: DataTable
- * 
  * Description: The class stores all the data for the chart and includes methods 
  *              for evaluating values that assist in generating charts.
  */
