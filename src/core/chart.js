@@ -1,4 +1,5 @@
 import Core from '@/core';
+import * as d3 from 'd3';
 
 /**
  * Class Name: Chart
@@ -65,7 +66,7 @@ export default class Chart extends Core {
     }
     return this;
   }
-  
+
   /**
    * 
    * @param {object} data Instance of DataTable Class 
@@ -80,5 +81,79 @@ export default class Chart extends Core {
     }
 
     return this;
+  }
+
+  /**
+   * Bind DOM Element with chart
+   * 
+   * @param {*} element DOM Element/Element ID/Element Class
+   */
+  element(element) {
+    // Selecting DOM Element (D3 Instance)
+    this._element = d3.select(element);
+
+    // HTML Element
+    const node = this._element.node();
+
+    if (!node) {
+      // If element not exists in DOM 
+      this._element = null;
+
+      this._emitter.emit(this._event.ERROR, {
+        errorCode: 1, 
+        errorMessage: `Failed to bind DOM element ${element} with chart.`
+      });
+    } else {
+      // If element exists in DOM
+
+      // Remove all content of element
+      this._element.selectAll('*').remove();
+
+      // Real Dimension of selected element
+      const dimensions = node.getBoundingClientRect();
+
+      // Set Width & Height
+      this._width = dimensions.width;
+      this._height = dimensions.height;
+
+      // Append div with position:relative
+      this._outerWrapper = this._element.append('div')
+        .style('position', 'relative');
+
+      // Append div inside the outer wrapper
+      this._innerWrapper = this._outerWrapper.append('div')
+        .style('width', this._width + 'px')
+        .style('height', this._height + 'px')
+        .style('overflow', 'hidden');
+    }
+
+    return this;
+  }
+
+  /**
+   * This method is used to listen on the events or the errors thrown 
+   * by the chart.
+   * 
+   * Supported Targets: `chart`, `legend-text`, `legend-shape`
+   * 
+   * @param {string} type enum(error, click:target, mouseout:target, mouseover:target, mousemove:target)
+   * @param {function} cb 
+   */
+  on(type, cb) {
+    type = `${type}`.trim();
+
+    if (type == this._event.ERROR) {
+      this._emitter.on(this._event.ERROR, cb);
+      return;
+    }
+
+    const [event, target] = type.split(':');
+    if (target) {
+      this._emitter.on(event, (e) => {
+        if (e.target === target) {
+          cb(e.event, e.data);
+        }
+      });
+    }
   }
 }
