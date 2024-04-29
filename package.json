@@ -2,13 +2,13 @@
   "name": "graphfinity",
   "version": "1.0.0",
   "description": "Graphfinity is the D3.js based reusable chart library. It has Cross-browser compatibility and each chart of this library is fully or configurable to perfectly match the look and feel of your website.",
-  "main": "dist/graphfinity.module.js",
+  "main": "lib/index.js",
   "scripts": {
     "bootstrap": "npm install",
-    "dev": "./node_modules/.bin/webpack-dev-server --config webpack.dev.config.js",
-    "build": "npm run build:var && npm run build:module",
-    "build:var": "./node_modules/.bin/webpack --config webpack.config.js",
-    "build:module": "./node_modules/.bin/webpack --config webpack.module.config.js"
+    "dev": "webpack-dev-server --config webpack.config.js",
+    "build": "npm run build:dist && npm run build:module",
+    "build:dist": "webpack --config webpack.config.js --env production",
+    "build:module": "babel src --out-dir lib"
   },
   "keywords": [
     "Graphfinity"
@@ -19,6 +19,7 @@
     "d3": "^7.9.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.1",
     "@babel/core": "^7.24.4",
     "@babel/preset-env": "^7.24.4",
     "babel-loader": "^9.1.3",
