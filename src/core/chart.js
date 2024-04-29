@@ -1,31 +1,13 @@
+import Core from '@/core';
+
 /**
  * Class Name: Chart
  * Description: All chart types should extend or inherit from this class because 
  *              it encompasses shared methods and properties.
  */
-class Chart {
+export default class Chart extends Core {
   constructor() {
-    // Chart Data (Instance of DataTable Class)
-    this._data = null;
-
-    // Width of the chart
-    this._width = null;
-
-    // Height of the chart
-    this._height = null;
-
-    // SVG Element
-    this._svg = null;
-
-    // Configuration for Chart, Legend & Tooltip
-    this._options = {
-      chart: {},
-      legend: {},
-      tooltip: {}
-    };
-
-    // Chart Animation Configuration
-    this._animation = {}
+    super();
   }
 
   /** 

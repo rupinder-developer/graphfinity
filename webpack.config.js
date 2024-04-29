@@ -1,5 +1,5 @@
 const path = require('path');
-const jsConfig = require('./jsConfig.json');
+const babel = require('./babel.config.json');
 
 module.exports = (env) => {
   let mode, config;
@@ -38,14 +38,7 @@ module.exports = (env) => {
           exclude: /(node_modules|bower_components)/,
           use: {
             loader: 'babel-loader',
-            options: {
-              presets: ['@babel/preset-env'],
-              plugins: [
-                ['module-resolver', {
-                  root: [jsConfig.compilerOptions.baseUrl]
-                }]
-              ]
-            }
+            options: babel
           }
         }
       ]
