@@ -1,4 +1,4 @@
-import * as colors from '@/data/colors/colors.json'
+import colors from '@/data/colors/colors.json'
 
 /**
  * This method allows users to retrieve the colors array from the "./src/data/colors" directory.

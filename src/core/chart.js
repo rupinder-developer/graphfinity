@@ -1,5 +1,6 @@
-import Core from '@/core';
 import * as d3 from 'd3';
+import Core from '@/core';
+import CONSTANTS from '@/core/constants';
 
 /**
  * Class Name: Chart
@@ -99,7 +100,7 @@ export default class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      this._emitter.emit(this._event.ERROR, {
+      this._emitter.emit(CONSTANTS.EVENT.TYPE.ERROR, {
         errorCode: 1, 
         errorMessage: `Failed to bind DOM element ${element} with chart.`
       });
@@ -142,8 +143,8 @@ export default class Chart extends Core {
   on(type, cb) {
     type = `${type}`.trim();
 
-    if (type == this._event.ERROR) {
-      this._emitter.on(this._event.ERROR, cb);
+    if (type == CONSTANTS.EVENT.TYPE.ERROR) {
+      this._emitter.on(CONSTANTS.EVENT.TYPE.ERROR, cb);
       return;
     }
 
