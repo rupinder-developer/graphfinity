@@ -1,7 +1,7 @@
 export default Object.freeze({
   EVENT: {
     TYPE: {
-      ERROR: 'error',
+      ERROR: 'exception',
       CLICK: 'click',
       MOUSEOVER: 'mouseover',
       MOUSEOUT: 'mouseout',
@@ -20,5 +20,11 @@ export default Object.freeze({
       RIGHT: 'right',
       LEFT: 'left'
     }
+  },
+  ERROR_MESSAGES: {
+    ELEMENT_NOT_FOUND: (element) => ({
+      errorCode: 1, 
+      errorMessage: `Failed to bind DOM element \`${element}\` with chart.`
+    })
   }
 });

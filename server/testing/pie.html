@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #chart {
+      margin: 40px auto;
+      width: 400px;
+      height: 300px;
+      border: 1px solid black;
+      font-family: 'Calibri';
+    }
+  </style>
+</head>
+
+<body>
+  <div id="chart">
+  </div>
+
+  <script src="./graphfinity.js"></script>
+  <script>
+    const data = [
+      ['Task', 'Hours per Day'],
+      ['Work',     11],
+      ['Eat',      2],
+      ['Commute',  2],
+      ['Watch TV', 2],
+      ['Sleep',    7]   
+    ];
+
+    const chart = new graphfinity.Pie()
+      .element('.chart')
+      .bind(data)
+      .animate();
+
+    chart.draw();
+
+    chart.on('exception', (e) => {
+      console.error(e)
+    })
+  </script>
+</body>
+
+</html>

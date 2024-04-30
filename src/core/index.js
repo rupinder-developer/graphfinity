@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events';
+import CONSTANTS from '@/core/constants';
 import * as colors from '@/helpers/color-scheme';
 
 /**
@@ -37,12 +38,26 @@ export default class Core {
         // Default Color Scheme
         colorScheme: colors.get('material')
       },
-      legend: {},
+      legend: {
+        display: true, 
+        toggle: true
+      },
       tooltip: {}
     };
 
     // Chart Animation Configuration
-    this._animation = {}
+    this._animation = null;
+  }
+
+
+  /**
+   * This method is used to emit an event for all the errors
+   * occur in the library.
+   * 
+   * @param {*} exception 
+   */
+  _throw(exception) {
+    this._emitter.emit(CONSTANTS.EVENT.TYPE.ERROR, exception);
   }
 
   /**

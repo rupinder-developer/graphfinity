@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import Core from '@/core';
 import CONSTANTS from '@/core/constants';
+import DataTable from '@/helpers/data-table';
 
 /**
  * Class Name: Chart
@@ -15,7 +16,7 @@ export default class Chart extends Core {
   /** 
    * This method is used to set chart configuration.
    * 
-   * @param {Object} options 
+   * @param {object} options 
    * @returns {this}
    */
   options(options) {
@@ -100,10 +101,9 @@ export default class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      this._emitter.emit(CONSTANTS.EVENT.TYPE.ERROR, {
-        errorCode: 1, 
-        errorMessage: `Failed to bind DOM element ${element} with chart.`
-      });
+      setTimeout(() => {
+        this._throw(CONSTANTS.ERROR_MESSAGES.ELEMENT_NOT_FOUND(element));
+      }, 0);
     } else {
       // If element exists in DOM
 
