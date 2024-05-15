@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "outDir": "./lib",
+    "strictFunctionTypes": true,
+    "isolatedModules": true,
+    "declaration":true,
+    "declarationDir": "./lib/types",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "tsc-alias": {
+    "resolveFullPaths": true,
+  }
+}

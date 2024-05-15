@@ -20,6 +20,7 @@
   </div>
 
   <script src="./graphfinity.js"></script>
+  
   <script>
     const data = [
       ['Task', 'Hours per Day'],
@@ -31,11 +32,11 @@
     ];
 
     const chart = new graphfinity.Pie()
-      .element('.chart')
+      .element('#chart')
       .bind(data)
       .animate();
 
-    chart.draw();
+    const render = chart.draw();
 
     chart.on('exception', (e) => {
       console.error(e)

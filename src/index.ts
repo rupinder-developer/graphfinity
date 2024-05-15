@@ -1,11 +1,4 @@
 /**
- * ************
- * Dependencies
- * ************
- */
-export * as d3 from 'd3';
-
-/**
  * *******
  * Helpers
  * *******
@@ -19,4 +12,4 @@ export * as colors from '@/helpers/color-scheme';
  * Charts
  * ******
  */
-export * from '@/charts';
+export { default as Pie } from '@/charts/pie';

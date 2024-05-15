@@ -4,7 +4,10 @@
  *              for evaluating values that assist in generating charts.
  */
 export default class DataTable {
-    constructor(columns = [], rows = []) {
+    _columns: any[];
+    _rows: any[];
+
+    constructor(columns: any[] = [], rows: any[] = []) {
         this._columns = columns;
         this._rows = rows;
     }

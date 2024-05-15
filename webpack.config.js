@@ -1,7 +1,6 @@
-const path = require('path');
-const babel = require('./babel.config.json');
+import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
-module.exports = (env) => {
+export default function(env) {
   let mode, config;
   if (env.production) {
     // Production Mode (--env production)
@@ -11,10 +10,10 @@ module.exports = (env) => {
     // Development Mode
     mode = 'development';
     config = {
-      devtool: 'eval-source-map',
+      devtool: 'inline-source-map',
       devServer: {
         static: {
-          directory: path.join(__dirname, 'server/testing')
+          directory: 'server/testing'
         },
         compress: true,
         port: 5001,
@@ -25,7 +24,7 @@ module.exports = (env) => {
   
   return {
     mode,
-    entry: ['./src/index.js'],
+    entry: ['./src/index.ts'],
     output: {
       filename: 'graphfinity.js',
       library: "graphfinity",
@@ -34,15 +33,16 @@ module.exports = (env) => {
     module: {
       rules: [
         {
-          test: /\.m?js$/,
-          exclude: /(node_modules|bower_components)/,
-          use: {
-            loader: 'babel-loader',
-            options: babel
-          }
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /(node_modules|bower_components)/
         }
       ]
     },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
+      plugins: [new TsconfigPathsPlugin()]
+    },
     ...config
   };
-}
+};

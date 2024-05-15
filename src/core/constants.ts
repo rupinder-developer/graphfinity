@@ -22,7 +22,7 @@ export default Object.freeze({
     }
   },
   ERROR_MESSAGES: {
-    ELEMENT_NOT_FOUND: (element) => ({
+    ELEMENT_NOT_FOUND: (element: string) => ({
       errorCode: 1, 
       errorMessage: `Failed to bind DOM element \`${element}\` with chart.`
     })

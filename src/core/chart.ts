@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import Core from '@/core';
+import Core from '@/core/index';
 import CONSTANTS from '@/core/constants';
 import DataTable from '@/helpers/data-table';
 
@@ -19,8 +19,8 @@ export default class Chart extends Core {
    * @param {object} options 
    * @returns {this}
    */
-  options(options) {
-    this._options.chart = { ...this.options.chart, ...options };
+  options(options: any) {
+    this._options.chart = { ...this._options.chart, ...options };
 
     return this;
   }
@@ -74,14 +74,11 @@ export default class Chart extends Core {
    * @param {object} data Instance of DataTable Class 
    * @returns {this}
    */
-  bind(data) {
+  bind(data: DataTable) {
     if (data instanceof DataTable) {
       this._data = data;
-    } else {
-      const rows = data.slice(1);
-      this._data = new DataTable(data[0], rows);
     }
-
+    
     return this;
   }
 
@@ -90,9 +87,9 @@ export default class Chart extends Core {
    * 
    * @param {*} element DOM Element/Element ID/Element Class
    */
-  element(element) {
+  element(element: string) {
     // Selecting DOM Element (D3 Instance)
-    this._element = d3.select(element);
+    this._element = d3.select<HTMLElement, unknown>(element);
 
     // HTML Element
     const node = this._element.node();
@@ -101,9 +98,7 @@ export default class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      setTimeout(() => {
-        this._throw(CONSTANTS.ERROR_MESSAGES.ELEMENT_NOT_FOUND(element));
-      }, 0);
+      this._throw(CONSTANTS.ERROR_MESSAGES.ELEMENT_NOT_FOUND(element));
     } else {
       // If element exists in DOM
 
@@ -140,7 +135,7 @@ export default class Chart extends Core {
    * @param {string} type enum(error, click:target, mouseout:target, mouseover:target, mousemove:target)
    * @param {function} cb 
    */
-  on(type, cb) {
+  on(type: string, cb: any) {
     type = `${type}`.trim();
 
     if (type == CONSTANTS.EVENT.TYPE.ERROR) {
@@ -155,6 +150,21 @@ export default class Chart extends Core {
           cb(e.event, e.data);
         }
       });
+    }
+  }
+
+  /**
+   * This method helps to draw chart and also validate before the final render.
+   */
+  
+  draw() {
+    if (this._validate()) {
+      // Final Render
+      try {
+        // return this._draw();
+      } catch(e) {
+        this._throw(e);
+      }
     }
   }
 }

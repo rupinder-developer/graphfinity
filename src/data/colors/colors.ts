@@ -1,4 +1,4 @@
-{
+export default {
   "material": [
     "#3366cc",
     "#dc3912",
