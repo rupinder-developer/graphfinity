@@ -1,7 +1,13 @@
+// Dependencies
 import * as d3 from 'd3';
-import Core from '@/core/index';
-import CONSTANTS from '@/core/constants';
+
+// Requirements
+import Core from '@/core';
 import DataTable from '@/helpers/data-table';
+
+// Constants
+import * as EVENT from '@/core/constants/event';
+import * as ERROR_MESSAGE from '@/core/constants/error-message';
 
 /**
  * Class Name: Chart
@@ -98,7 +104,7 @@ export default class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      this._throw(CONSTANTS.ERROR_MESSAGES.ELEMENT_NOT_FOUND(element));
+      this._throw(ERROR_MESSAGE.ELEMENT_NOT_FOUND(element));
     } else {
       // If element exists in DOM
 
@@ -138,8 +144,8 @@ export default class Chart extends Core {
   on(type: string, cb: any) {
     type = `${type}`.trim();
 
-    if (type == CONSTANTS.EVENT.TYPE.ERROR) {
-      this._emitter.on(CONSTANTS.EVENT.TYPE.ERROR, cb);
+    if (type == EVENT.ERROR) {
+      this._emitter.on(EVENT.ERROR, cb);
       return;
     }
 

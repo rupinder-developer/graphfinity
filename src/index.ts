@@ -4,7 +4,7 @@
  * *******
  */
 export { default as DataTable } from '@/helpers/data-table';
-export * as colors from '@/helpers/color-scheme';
+export { default as Theme } from '@/core/theme';
 
 
 /**

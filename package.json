@@ -1,6 +1,6 @@
 {
   "name": "graphfinity",
-  "version": "1.0.8",
+  "version": "1.0.0",
   "description": "Graphfinity is the D3.js based reusable chart library. It has Cross-browser compatibility and each chart of this library is fully or configurable to perfectly match the look and feel of your website.",
   "main": "./lib/index.js",
   "types": "./lib/types/index.d.ts",
