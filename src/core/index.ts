@@ -109,5 +109,11 @@ export default class Core {
       throw new Error(ERROR_MESSAGE.FAILED_DATA_BIND);
     } 
   }
+
+  /**
+   * This method is used to draw the chart and needs to be overridden by the child class,
+   * where all the implementation of the chart will be done.
+   */
+  protected _draw() {}
 }
 

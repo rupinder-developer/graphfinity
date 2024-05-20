@@ -1,3 +1,4 @@
+// Requirements
 import Chart from '@/core/chart';
 
 export default class Pie extends Chart {
@@ -5,9 +6,13 @@ export default class Pie extends Chart {
     super();
   }
 
-  _draw() {
+  /**
+   * @override
+   * 
+   * @returns This method returns a function that is used to re-render the chart.
+   */
+  protected _draw() {
     const render = () => {
-      
       
     };
 

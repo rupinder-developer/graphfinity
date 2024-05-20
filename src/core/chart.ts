@@ -172,7 +172,7 @@ export default class Chart extends Core {
   draw() {
     try {
       this._validate();
-  
+      this._draw();
     } catch (e) {
       if (e instanceof Error) {
         this._emitException(e.error);
