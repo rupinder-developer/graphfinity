@@ -1,13 +1,18 @@
 // Dependencies
-import { EventEmitter } from 'events';
+import EventEmitter from 'events';
 
 // Requirements
 import DataTable from '@/helpers/data-table';
 import Theme from '@/core/theme';
+import Error from '@/helpers/error';
+
+// Interfaces
+import OptionsInterface, { AnimationInterface } from '@/core/interfaces/options';
+import ErrorInterface from '@/core/interfaces/error';
 
 // Constants
 import * as EVENT from '@/core/constants/event';
-
+import * as ERROR_MESSAGE from '@/core/constants/error-message';
 
 /**
  * Class Name: Core
@@ -15,10 +20,10 @@ import * as EVENT from '@/core/constants/event';
  */
 export default class Core {
   // Event Emitter
-  protected _emitter: EventEmitter = new EventEmitter();
+  protected _emitter = new EventEmitter();
 
   // Chart Data 
-  protected _data!: DataTable;
+  protected _data: DataTable | null = null;
 
   // Width of the chart
   protected _width!: number;
@@ -39,14 +44,10 @@ export default class Core {
   protected _innerWrapper: d3.Selection<HTMLElementTagNameMap['div'], unknown, HTMLElement, any> | null = null;
 
   // Configuration for Chart, Legend & Tooltip
-  protected _options: {
-    chart: any,
-    legend: any,
-    tooltip: any
-  } = {
+  protected _options: OptionsInterface = {
       chart: {
         // Default Color Scheme
-        colorScheme: Theme.material
+        theme: Theme.material
       },
       legend: {
         display: true,
@@ -55,36 +56,34 @@ export default class Core {
       tooltip: {}
     };
 
-  protected _animation: { time: number } | null = null;
+  protected _animation: AnimationInterface | null = null;
 
   /**
    * This variable stores the error thrown by the chart before
    * the final render that is before calling draw() method.
    */
-  protected _preRenderError = null;
+  protected _preRenderError: ErrorInterface | null = null;
 
   /**
    * This method is used to emit an event for all the errors
    * occur in the library.
    * 
-   * @param {*} exception 
+   * @param exception 
    */
-  protected _throw(exception: any) {
+  protected _emitException(exception: ErrorInterface) {
     setTimeout(() => {
-      this._emitter.emit(EVENT.ERROR, exception);
+      this._emitter.emit(EVENT.EXCEPTION, exception);
     }, 0);
   }
 
   /**
    * Used to draw chevron icon.
    * 
-   * @param {object} element Parent Element (D3 Instance)
-   * @param {number} width 
-   * @param {number} height 
-   * 
-   * @return {object} D3 Instance
+   * @param element Parent Element
+   * @param width 
+   * @param height 
    */
-  protected _chevron(element: any, width: any, height: any) {
+  protected _chevron(element: d3.Selection<HTMLElement | SVGElement, unknown, HTMLElement, any>, width: number, height: number) {
     const chevron = element.append('svg')
       .attr('width', width)
       .attr('height', height)
@@ -102,33 +101,13 @@ export default class Core {
    * errors or if there is any possibility of encountering an error.
    */
   protected _validate() {
-    if (this._element == null) {
-      return false;
+    if (this._preRenderError != null) {
+      throw new Error(this._preRenderError);
+    } else if (this._element == null) {
+      throw new Error(ERROR_MESSAGE.FAILED_ELEMENT_BIND);
     } else if (this._data == null) {
-      return false;
-    }
-
-    return true;
-  }
-
-  protected _drawLegends(element: any, type = 'horizontal') {
-    if (type == 'horizontal') {
-      /**
-       * ***********************
-       * DRAW HORIZONTAL LEGENDS
-       * ***********************
-       */
-
-
-
-      return;
-    }
-
-    /**
-     * *********************
-     * DRAW VERTICAL LEGENDS
-     * *********************
-     */
+      throw new Error(ERROR_MESSAGE.FAILED_DATA_BIND);
+    } 
   }
 }
 

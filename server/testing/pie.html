@@ -22,14 +22,14 @@
   <script src="./graphfinity.js"></script>
   
   <script>
-    const data = [
+    const data = new graphfinity.DataTable([
       ['Task', 'Hours per Day'],
       ['Work',     11],
       ['Eat',      2],
       ['Commute',  2],
       ['Watch TV', 2],
       ['Sleep',    7]   
-    ];
+    ]);
 
     const chart = new graphfinity.Pie()
       .element('#chart')

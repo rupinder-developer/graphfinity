@@ -4,6 +4,15 @@ import * as d3 from 'd3';
 // Requirements
 import Core from '@/core';
 import DataTable from '@/helpers/data-table';
+import Error from '@/helpers/error';
+
+// Interfaces
+import { 
+  AnimationInterface,
+  ChartInterface,
+  LegendInterface,
+  TooltipInterface
+} from '@/core/interfaces/options';
 
 // Constants
 import * as EVENT from '@/core/constants/event';
@@ -22,10 +31,9 @@ export default class Chart extends Core {
   /** 
    * This method is used to set chart configuration.
    * 
-   * @param {object} options 
-   * @returns {this}
+   * @param options 
    */
-  options(options: any) {
+  options(options: Partial<ChartInterface>) {
     this._options.chart = { ...this._options.chart, ...options };
 
     return this;
@@ -34,10 +42,9 @@ export default class Chart extends Core {
   /**
    * This method is used to set configuration related to chart animation.
    * 
-   * @param {object} options 
-   * @returns {this}
+   * @param options 
    */
-  animate(options = {}) {
+  animate(options: Partial<AnimationInterface> = {}) {
     // Default Animation Options
     this._animation = {
       time: 750,
@@ -50,10 +57,9 @@ export default class Chart extends Core {
   /**
    * This method is used to set legend configuration.
    * 
-   * @param {object} options 
-   * @returns {this}
+   * @param options 
    */
-  legend(options = {}) {
+  legend(options: Partial<LegendInterface> = {}) {
     this._options.legend = {
       ...this._options.legend,
       ...options
@@ -64,10 +70,9 @@ export default class Chart extends Core {
   /**
    * This method is used to set tooltip configuration
    * 
-   * @param {object} options
-   * @returns {this}
+   * @param options
    */
-  tooltip(options = {}) {
+  tooltip(options: Partial<TooltipInterface> = {}) {
     this._options.tooltip = {
       ...this._options.tooltip,
       ...options
@@ -76,26 +81,28 @@ export default class Chart extends Core {
   }
 
   /**
+   * This method is used to bind data for the chart.
    * 
-   * @param {object} data Instance of DataTable Class 
-   * @returns {this}
+   * @param data Instance of DataTable Class 
    */
   bind(data: DataTable) {
     if (data instanceof DataTable) {
       this._data = data;
+    } else {
+      this._preRenderError = ERROR_MESSAGE.FAILED_DATA_BIND_INVALID;
     }
-    
+
     return this;
   }
 
   /**
    * Bind DOM Element with chart
    * 
-   * @param {*} element DOM Element/Element ID/Element Class
+   * @param selector Query Selector
    */
-  element(element: string) {
+  element(selector: string) {
     // Selecting DOM Element (D3 Instance)
-    this._element = d3.select<HTMLElement, unknown>(element);
+    this._element = d3.select<HTMLElement, unknown>(selector);
 
     // HTML Element
     const node = this._element.node();
@@ -104,7 +111,7 @@ export default class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      this._throw(ERROR_MESSAGE.ELEMENT_NOT_FOUND(element));
+      this._preRenderError = ERROR_MESSAGE.ELEMENT_NOT_FOUND(selector);
     } else {
       // If element exists in DOM
 
@@ -138,14 +145,14 @@ export default class Chart extends Core {
    * 
    * Supported Targets: `chart`, `legend-text`, `legend-shape`
    * 
-   * @param {string} type enum(error, click:target, mouseout:target, mouseover:target, mousemove:target)
-   * @param {function} cb 
+   * @param type enum(exception, click:target, mouseout:target, mouseover:target, mousemove:target)
+   * @param cb 
    */
-  on(type: string, cb: any) {
+  on(type: string, cb: (event: any, data: any) => void ) {
     type = `${type}`.trim();
 
-    if (type == EVENT.ERROR) {
-      this._emitter.on(EVENT.ERROR, cb);
+    if (type == EVENT.EXCEPTION) {
+      this._emitter.on(EVENT.EXCEPTION, cb);
       return;
     }
 
@@ -162,14 +169,13 @@ export default class Chart extends Core {
   /**
    * This method helps to draw chart and also validate before the final render.
    */
-  
   draw() {
-    if (this._validate()) {
-      // Final Render
-      try {
-        // return this._draw();
-      } catch(e) {
-        this._throw(e);
+    try {
+      this._validate();
+  
+    } catch (e) {
+      if (e instanceof Error) {
+        this._emitException(e.error);
       }
     }
   }
