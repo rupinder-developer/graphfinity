@@ -33,7 +33,7 @@ export default abstract class Chart extends Core {
    * where all the implementation of the chart will be done.
    * 
    * 
-   * @throws {Exception} - Throws if an error condition is met.
+   * @throws {Exception} - Throws if an error/exception condition is met.
    */
   protected abstract _draw(): () => void;
 
@@ -98,7 +98,7 @@ export default abstract class Chart extends Core {
     if (data instanceof DataTable) {
       this._data = data;
     } else {
-      this._preRenderError = EXCEPTION.FAILED_DATA_BIND_INVALID;
+      this._preRenderException = EXCEPTION.FAILED_DATA_BIND_INVALID;
     }
 
     return this;
@@ -120,7 +120,7 @@ export default abstract class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      this._preRenderError = EXCEPTION.ELEMENT_NOT_FOUND(selector);
+      this._preRenderException = EXCEPTION.ELEMENT_NOT_FOUND(selector);
     } else {
       // If element exists in DOM
 
@@ -149,7 +149,7 @@ export default abstract class Chart extends Core {
   }
 
   /**
-   * This method is used to listen on the events or the errors thrown 
+   * This method is used to listen on the events or the errors/exceptions thrown 
    * by the chart.
    * 
    * Supported Targets: `chart`, `legend-text`, `legend-shape`

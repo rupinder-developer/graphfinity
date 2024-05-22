@@ -1,5 +1,5 @@
 /**
- * This file contains the error messages
+ * This file contains the error/exception messages
  */
 
 import ExceptionInterface from "@/core/interfaces/exception";

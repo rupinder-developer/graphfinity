@@ -59,13 +59,13 @@ export default class Core {
   protected _animation: AnimationInterface | null = null;
 
   /**
-   * This variable stores the error thrown by the chart before
+   * This variable stores the error/exception thrown by the chart before
    * the final render that is before calling draw() method.
    */
-  protected _preRenderError: ExceptionInterface | null = null;
+  protected _preRenderException: ExceptionInterface | null = null;
 
   /**
-   * This method is used to emit an event for all the errors
+   * This method is used to emit an event for all the errors/exceptions
    * occur in the library.
    * 
    * @param exception 
@@ -101,8 +101,8 @@ export default class Core {
    * errors or if there is any possibility of encountering an error.
    */
   protected _validate() {
-    if (this._preRenderError != null) {
-      throw new Exception(this._preRenderError);
+    if (this._preRenderException != null) {
+      throw new Exception(this._preRenderException);
     } else if (this._element == null) {
       throw new Exception(EXCEPTION.FAILED_ELEMENT_BIND);
     } else if (this._data == null) {

@@ -2,8 +2,8 @@
 import ExceptionInterface from "@/core/interfaces/exception";
 
 /**
- * Class Name: Error
- * Description: This class used to handle error
+ * Class Name: Exception
+ * Description: This class used to handle error/exception
  */
 export default class Exception {
   // Exception Object
