@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 // Requirements
 import Core from '@/core';
 import DataTable from '@/helpers/data-table';
-import Error from '@/helpers/error';
+import Exception from '@/helpers/exception';
 
 // Interfaces
 import { 
@@ -16,17 +16,26 @@ import {
 
 // Constants
 import * as EVENT from '@/core/constants/event';
-import * as ERROR_MESSAGE from '@/core/constants/error-message';
+import * as EXCEPTION from '@/core/constants/exception';
 
 /**
  * Class Name: Chart
  * Description: All chart types should extend or inherit from this class because 
  *              it encompasses shared methods and properties.
  */
-export default class Chart extends Core {
+export default abstract class Chart extends Core {
   constructor() {
     super();
   }
+
+  /**
+   * This method is used to draw the chart and needs to be overridden by the child class,
+   * where all the implementation of the chart will be done.
+   * 
+   * 
+   * @throws {Exception} - Throws if an error condition is met.
+   */
+  protected abstract _draw(): () => void;
 
   /** 
    * This method is used to set chart configuration.
@@ -89,7 +98,7 @@ export default class Chart extends Core {
     if (data instanceof DataTable) {
       this._data = data;
     } else {
-      this._preRenderError = ERROR_MESSAGE.FAILED_DATA_BIND_INVALID;
+      this._preRenderError = EXCEPTION.FAILED_DATA_BIND_INVALID;
     }
 
     return this;
@@ -111,7 +120,7 @@ export default class Chart extends Core {
       // If element not exists in DOM 
       this._element = null;
 
-      this._preRenderError = ERROR_MESSAGE.ELEMENT_NOT_FOUND(selector);
+      this._preRenderError = EXCEPTION.ELEMENT_NOT_FOUND(selector);
     } else {
       // If element exists in DOM
 
@@ -172,11 +181,13 @@ export default class Chart extends Core {
   draw() {
     try {
       this._validate();
-      this._draw();
+      return this._draw();
     } catch (e) {
-      if (e instanceof Error) {
-        this._emitException(e.error);
+      if (e instanceof Exception) {
+        this._emitException(e.exception);
       }
+
+      return null;
     }
   }
 }

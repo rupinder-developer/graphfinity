@@ -4,15 +4,15 @@ import EventEmitter from 'events';
 // Requirements
 import DataTable from '@/helpers/data-table';
 import Theme from '@/core/theme';
-import Error from '@/helpers/error';
+import Exception from '@/helpers/exception';
 
 // Interfaces
 import OptionsInterface, { AnimationInterface } from '@/core/interfaces/options';
-import ErrorInterface from '@/core/interfaces/error';
+import ExceptionInterface from '@/core/interfaces/exception';
 
 // Constants
 import * as EVENT from '@/core/constants/event';
-import * as ERROR_MESSAGE from '@/core/constants/error-message';
+import * as EXCEPTION from '@/core/constants/exception';
 
 /**
  * Class Name: Core
@@ -62,7 +62,7 @@ export default class Core {
    * This variable stores the error thrown by the chart before
    * the final render that is before calling draw() method.
    */
-  protected _preRenderError: ErrorInterface | null = null;
+  protected _preRenderError: ExceptionInterface | null = null;
 
   /**
    * This method is used to emit an event for all the errors
@@ -70,7 +70,7 @@ export default class Core {
    * 
    * @param exception 
    */
-  protected _emitException(exception: ErrorInterface) {
+  protected _emitException(exception: ExceptionInterface) {
     setTimeout(() => {
       this._emitter.emit(EVENT.EXCEPTION, exception);
     }, 0);
@@ -102,18 +102,12 @@ export default class Core {
    */
   protected _validate() {
     if (this._preRenderError != null) {
-      throw new Error(this._preRenderError);
+      throw new Exception(this._preRenderError);
     } else if (this._element == null) {
-      throw new Error(ERROR_MESSAGE.FAILED_ELEMENT_BIND);
+      throw new Exception(EXCEPTION.FAILED_ELEMENT_BIND);
     } else if (this._data == null) {
-      throw new Error(ERROR_MESSAGE.FAILED_DATA_BIND);
+      throw new Exception(EXCEPTION.FAILED_DATA_BIND);
     } 
   }
-
-  /**
-   * This method is used to draw the chart and needs to be overridden by the child class,
-   * where all the implementation of the chart will be done.
-   */
-  protected _draw() {}
 }
 
