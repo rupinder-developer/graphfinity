@@ -3,8 +3,8 @@ export interface ChartInterface {
 }
 
 export interface LegendInterface {
-  display: boolean, 
-  toggle: boolean
+  display: boolean;
+  toggle: boolean;
 }
 
 export interface TooltipInterface {
@@ -12,11 +12,11 @@ export interface TooltipInterface {
 }
 
 export interface AnimationInterface {
-  time: number
+  time: number;
 }
 
 export default interface OptionsInterface {
-  chart: ChartInterface,
-  legend: LegendInterface,
-  tooltip: TooltipInterface
+  chart: ChartInterface;
+  legend: LegendInterface;
+  tooltip: TooltipInterface;
 }

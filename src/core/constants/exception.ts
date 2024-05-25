@@ -4,6 +4,12 @@
 
 import ExceptionInterface from "@/core/interfaces/exception";
 
+
+export const UNKNOWN_EXCEPTION: ExceptionInterface = { 
+  code: -1,
+  message: 'Unknow exception thrown by the chart.'
+};
+
 export const ELEMENT_NOT_FOUND = (selector: string): ExceptionInterface => ({
   code: 1, 
   message: `Failed to bind DOM element. Unable to find the element within the document that matches \`${selector}\`.`

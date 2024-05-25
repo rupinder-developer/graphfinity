@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 // Requirements
 import Core from '@/core';
 import DataTable from '@/helpers/data-table';
+import Legend from '@/core/legend';
 
 // Interfaces
 import { 
@@ -184,9 +185,22 @@ export default abstract class Chart extends Core {
     } catch (e) {
       if (e instanceof Exception) {
         this._emitException(e.exception);
+      } else {
+        this._emitException(EXCEPTION.UNKNOWN_EXCEPTION);
       }
 
       return null;
+    }
+  }
+
+  /**
+   * This method is used to initialize the core classes.
+   */
+  init() {
+    return {
+      legend: () => {
+        return new Legend(this._options.legend, this._emitter);
+      }
     }
   }
 }
