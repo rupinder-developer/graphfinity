@@ -4,7 +4,6 @@ import EventEmitter from 'events';
 // Requirements
 import DataTable from '@/helpers/data-table';
 import Theme from '@/core/theme';
-import Exception from '@/helpers/exception';
 
 // Interfaces
 import OptionsInterface, { AnimationInterface } from '@/core/interfaces/options';
@@ -62,7 +61,7 @@ export default class Core {
    * This variable stores the error/exception thrown by the chart before
    * the final render that is before calling draw() method.
    */
-  protected _preRenderException: ExceptionInterface | null = null;
+  protected _preRenderException: ExceptionInterface | null  = null;
 
   /**
    * This method is used to emit an event for all the errors/exceptions

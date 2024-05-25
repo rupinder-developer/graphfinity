@@ -4,7 +4,6 @@ import * as d3 from 'd3';
 // Requirements
 import Core from '@/core';
 import DataTable from '@/helpers/data-table';
-import Exception from '@/helpers/exception';
 
 // Interfaces
 import { 

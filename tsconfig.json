@@ -19,6 +19,7 @@
       "@/*": ["./src/*"],
     }
   },
+  "include": ["./src/**/*", "./global.d.ts"],
   "tsc-alias": {
     "resolveFullPaths": true,
   }

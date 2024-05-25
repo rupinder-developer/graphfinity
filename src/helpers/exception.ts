@@ -13,3 +13,5 @@ export default class Exception {
     this.exception = exception;
   }
 }
+
+(global as any).Exception = Exception;

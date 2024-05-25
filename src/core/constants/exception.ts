@@ -19,7 +19,7 @@ export const FAILED_DATA_BIND_INVALID: ExceptionInterface  = {
   message: 'Failed to bind data with the chart. Make sure to use the DataTable class for data binding.'
 };
 
-export const FAILED_DATA_BIND: ExceptionInterface ={
+export const FAILED_DATA_BIND: ExceptionInterface = {
   code: 4,
   message: 'Failed to bind data with the chart. Use the bind() method to bind the data.'
 };
