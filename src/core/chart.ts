@@ -7,7 +7,7 @@ import DataTable from '@/helpers/data-table';
 import Legend from '@/core/legend';
 
 // Interfaces
-import { 
+import {
   AnimationInterface,
   ChartInterface,
   LegendInterface,
@@ -42,7 +42,7 @@ export default abstract class Chart extends Core {
    * 
    * @param options 
    */
-  options(options: Partial<ChartInterface>) {
+  options(options: Partial<ChartInterface> = {}) {
     this._options.chart = { ...this._options.chart, ...options };
 
     return this;
@@ -60,6 +60,7 @@ export default abstract class Chart extends Core {
       ...options
     };
 
+
     return this;
   }
 
@@ -72,7 +73,8 @@ export default abstract class Chart extends Core {
     this._options.legend = {
       ...this._options.legend,
       ...options
-    }
+    } as LegendInterface;
+
     return this;
   }
 
@@ -157,7 +159,7 @@ export default abstract class Chart extends Core {
    * @param type enum(exception, click:target, mouseout:target, mouseover:target, mousemove:target)
    * @param cb 
    */
-  on(type: string, cb: (event: any, data: any) => void ) {
+  on(type: string, cb: (event: any, data: any) => void) {
     type = `${type}`.trim();
 
     if (type == EVENT.EXCEPTION) {
@@ -198,9 +200,11 @@ export default abstract class Chart extends Core {
    */
   init() {
     return {
-      legend: () => {
-        return new Legend(this._options.legend, this._emitter);
-      }
+      legend: () => new Legend(
+        this._options.legend,
+        this._emitter,
+        this._options.chart.theme
+      )
     }
   }
 }

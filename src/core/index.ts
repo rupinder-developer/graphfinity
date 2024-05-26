@@ -44,16 +44,19 @@ export default class Core {
 
   // Configuration for Chart, Legend & Tooltip
   protected _options: OptionsInterface = {
-      chart: {
-        // Default Color Scheme
-        theme: Theme.material
-      },
-      legend: {
-        display: true,
-        toggle: true
-      },
-      tooltip: {}
-    };
+    chart: {
+      // Default Color Scheme
+      theme: Theme.material
+    },
+    legend: {
+      display: true,
+      toggle: true,
+      behaviour: 'controllers',
+      layout: 'vertical',
+      position: 'right'
+    },
+    tooltip: {}
+  };
 
   protected _animation: AnimationInterface | null = null;
 
@@ -61,7 +64,7 @@ export default class Core {
    * This variable stores the error/exception thrown by the chart before
    * the final render that is before calling draw() method.
    */
-  protected _preRenderException: ExceptionInterface | null  = null;
+  protected _preRenderException: ExceptionInterface | null = null;
 
   /**
    * This method is used to emit an event for all the errors/exceptions
@@ -106,7 +109,7 @@ export default class Core {
       throw new Exception(EXCEPTION.FAILED_ELEMENT_BIND);
     } else if (this._data == null) {
       throw new Exception(EXCEPTION.FAILED_DATA_BIND);
-    } 
+    }
   }
 }
 
