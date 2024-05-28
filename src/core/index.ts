@@ -7,7 +7,7 @@ import Theme from '@/core/theme';
 
 // Interfaces
 import OptionsInterface, { AnimationInterface } from '@/core/interfaces/options';
-import ExceptionInterface from '@/core/interfaces/exception';
+import { ExceptionInterface } from '@/core/interfaces/exception';
 
 // Constants
 import * as EVENT from '@/core/constants/event';

@@ -1,5 +1,5 @@
 // Requirements
-import ExceptionInterface from "@/core/interfaces/exception";
+import { ExceptionInterface } from "@/core/interfaces/exception";
 
 /**
  * Class Name: Exception

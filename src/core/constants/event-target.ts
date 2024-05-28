@@ -3,5 +3,4 @@
  */
 
 export const CHART = 'chart';
-export const LEGEND_TEXT = 'legend-text';
-export const LEGEND_SHAPE = 'legend-shape';
+export const LEGEND = 'legend';

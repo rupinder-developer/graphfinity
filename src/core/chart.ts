@@ -13,6 +13,9 @@ import {
   LegendInterface,
   TooltipInterface
 } from '@/core/interfaces/options';
+import { 
+  EventTargetInterface
+} from '@/core/interfaces/event'
 
 // Constants
 import * as EVENT from '@/core/constants/event';
@@ -113,7 +116,7 @@ export default abstract class Chart extends Core {
    */
   element(selector: string) {
     // Selecting DOM Element (D3 Instance)
-    this._element = d3.select<HTMLElement, unknown>(selector);
+    this._element = d3.select(selector);
 
     // HTML Element
     const node = this._element.node();
@@ -138,12 +141,15 @@ export default abstract class Chart extends Core {
 
       // Append div with position:relative
       this._outerWrapper = this._element.append('div')
-        .style('position', 'relative');
+        .style('position', 'relative')
+        .style('width', '100%')
+        .style('height', '100%');
 
       // Append div inside the outer wrapper
       this._innerWrapper = this._outerWrapper.append('div')
-        .style('width', this._width + 'px')
-        .style('height', this._height + 'px')
+        .style('position', 'absolute')
+        .style('width', '100%')
+        .style('height', '100%')
         .style('overflow', 'hidden');
     }
 
@@ -159,9 +165,7 @@ export default abstract class Chart extends Core {
    * @param type enum(exception, click:target, mouseout:target, mouseover:target, mousemove:target)
    * @param cb 
    */
-  on(type: string, cb: (event: any, data: any) => void) {
-    type = `${type}`.trim();
-
+  on(type: EventTargetInterface, cb: (event: any, data: any) => void) {
     if (type == EVENT.EXCEPTION) {
       this._emitter.on(EVENT.EXCEPTION, cb);
       return;

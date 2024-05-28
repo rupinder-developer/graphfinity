@@ -1,4 +1,4 @@
-export default interface ExceptionInterface {
+export interface ExceptionInterface {
   code: number;
   message: string;
 }

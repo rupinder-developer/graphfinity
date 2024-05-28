@@ -12,7 +12,9 @@ export default class Pie extends Chart {
    * @returns This method returns a function that is used to re-render the chart.
    */
   protected _draw() {
-    const render = () => {};
+    const render = () => {
+      
+    };
 
     render();
 

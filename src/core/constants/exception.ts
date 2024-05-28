@@ -2,7 +2,7 @@
  * This file contains the error/exception messages
  */
 
-import ExceptionInterface from "@/core/interfaces/exception";
+import { ExceptionInterface } from "@/core/interfaces/exception";
 
 
 export const UNKNOWN_EXCEPTION: ExceptionInterface = { 
