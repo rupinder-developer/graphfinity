@@ -13,12 +13,8 @@ import {
   LegendInterface,
   TooltipInterface
 } from '@/core/interfaces/options';
-import { 
-  EventTargetInterface
-} from '@/core/interfaces/event'
 
 // Constants
-import * as EVENT from '@/core/constants/event';
 import * as EXCEPTION from '@/core/constants/exception';
 
 /**
@@ -115,7 +111,7 @@ export default abstract class Chart extends Core {
    * @param selector Query Selector
    */
   element(selector: string) {
-    // Selecting DOM Element (D3 Instance)
+    // Selecting DOM Element
     this._element = d3.select(selector);
 
     // HTML Element
@@ -160,25 +156,13 @@ export default abstract class Chart extends Core {
    * This method is used to listen on the events or the errors/exceptions thrown 
    * by the chart.
    * 
-   * Supported Targets: `chart`, `legend-text`, `legend-shape`
-   * 
-   * @param type enum(exception, click:target, mouseout:target, mouseover:target, mousemove:target)
+   * @param type 
    * @param cb 
    */
-  on(type: EventTargetInterface, cb: (event: any, data: any) => void) {
-    if (type == EVENT.EXCEPTION) {
-      this._emitter.on(EVENT.EXCEPTION, cb);
-      return;
-    }
-
-    const [event, target] = type.split(':');
-    if (target) {
-      this._emitter.on(event, (e) => {
-        if (e.target === target) {
-          cb(e.event, e.data);
-        }
-      });
-    }
+  on(target: string, cb: (event: any, data: any) => void) {
+    this._emitter.on(target, (e) => {
+      cb(e.event, e.data);
+    });
   }
 
   /**
@@ -204,11 +188,16 @@ export default abstract class Chart extends Core {
    */
   init() {
     return {
-      legend: () => new Legend(
-        this._options.legend,
-        this._emitter,
-        this._options.chart.theme
-      )
+      legend: () => {
+        if (this._singleton.legend === null) {
+          this._singleton.legend = new Legend(
+            this._options.legend,
+            this._emitter,
+            this._options.chart.theme
+          );
+        }
+        return this._singleton.legend;
+      }
     }
   }
 }

@@ -1,9 +1,32 @@
 /**
- * This file contains all the events supported by Graphfinity.
+ * ******
+ * Events
+ * ******
  */
+export const CLICK = {
+  CHART: 'click[chart]',
+  LEGEND: 'click[legend]'
+};
 
-export const EXCEPTION =  'exception';
-export const CLICK =  'click';
-export const MOUSEOVER =  'mouseover';
-export const MOUSEOUT =  'mouseout';
-export const MOUSEMOVE =  'mousemove';
+export const MOUSEOVER = {
+  CHART: 'mouseover[chart]',
+  LEGEND: 'mouseover[legend]'
+};
+
+
+export const MOUSEOUT = {
+  CHART: 'mouseout[chart]',
+  LEGEND: 'mouseout[legend]'
+};
+
+export const MOUSEMOVE = {
+  CHART: 'mousemove[chart]',
+  LEGEND: 'mousemove[legend]'
+};
+
+/**
+ * ************
+ * Other Events
+ * ************
+ */
+export const EXCEPTION = 'exception';

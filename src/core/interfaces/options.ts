@@ -1,12 +1,13 @@
+import Theme from '@/core/theme';
+
 /**
  * *******************
  * Chart Configuration
  * *******************
  */
 export interface ChartInterface {
-  theme: string[]
-}
-
+  theme: Theme
+};
 
 /**
  * ********************
@@ -17,17 +18,17 @@ interface LegendBase {
   display: boolean;
   toggle: boolean;
   behaviour: 'controllers' | 'scroll';
-}
+};
 
 interface HorizonalLegend extends LegendBase {
   layout: 'horizontal'
   position: 'top' | 'bottom';
-}
+};
 
 interface VerticalLegend extends LegendBase {
   layout: 'vertical';
   position: 'left' | 'right';
-}
+};
 
 export type LegendInterface = HorizonalLegend | VerticalLegend;
 
@@ -38,7 +39,7 @@ export type LegendInterface = HorizonalLegend | VerticalLegend;
  */
 export interface TooltipInterface {
 
-}
+};
 
 /**
  * ***********************
@@ -47,7 +48,7 @@ export interface TooltipInterface {
  */
 export interface AnimationInterface {
   time: number;
-}
+};
 
 
 /**
@@ -59,4 +60,4 @@ export default interface OptionsInterface {
   chart: ChartInterface;
   legend: LegendInterface;
   tooltip: TooltipInterface;
-}
+};

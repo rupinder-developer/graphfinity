@@ -4,6 +4,7 @@ import EventEmitter from 'events';
 // Requirements
 import DataTable from '@/helpers/data-table';
 import Theme from '@/core/theme';
+import Legend from '@/core/legend';
 
 // Interfaces
 import OptionsInterface, { AnimationInterface } from '@/core/interfaces/options';
@@ -30,11 +31,11 @@ export default class Core {
   // Height of the chart
   protected _height!: number;
 
-  // Selected Element (D3 Instance)
+  // Selected Element
   protected _element: d3.Selection<HTMLElement, unknown, HTMLElement, any> | null = null;
 
   /**
-   * Chart Wrapper (D3 Instance)
+   * Chart Wrapper
    * 
    * These are the <div> elements appended within the selected element (this._element), 
    * within which all the charts are drawn.
@@ -45,8 +46,8 @@ export default class Core {
   // Configuration for Chart, Legend & Tooltip
   protected _options: OptionsInterface = {
     chart: {
-      // Default Color Scheme
-      theme: Theme.material
+      // Default Theme
+      theme: new Theme('material')
     },
     legend: {
       display: true,
@@ -65,6 +66,16 @@ export default class Core {
    * the final render that is before calling draw() method.
    */
   protected _preRenderException: ExceptionInterface | null = null;
+
+  /**
+   * The `_singleton` variable holds instances of the core classes from Graphifinity 
+   * and ensures that these instances maintain singleton behavior.
+   */
+  protected _singleton: {
+    legend: Legend | null 
+  } = {
+    legend: null
+  };
 
   /**
    * This method is used to emit an event for all the errors/exceptions
