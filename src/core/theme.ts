@@ -7,7 +7,7 @@ export default class Theme {
 
   /**
    * It is used to set the theme for a chart.
-   * 
+   *
    * @param theme `Graphifinity Theme Name` or `Array of Colors (hex, rgba, rgb)`
    */
   constructor(theme: keyof typeof themes | string[]) {
@@ -24,11 +24,10 @@ export default class Theme {
     }
   }
 
-  
   /**
    * It is used to retrieve a color from the `this.theme` array based on the given index.
-   * 
-   * @param {number} index 
+   *
+   * @param {number} index
    */
   getColor(index: number) {
     if (index >= this.theme.length) {

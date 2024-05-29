@@ -7,7 +7,9 @@ import Theme from '@/core/theme';
 import Legend from '@/core/legend';
 
 // Interfaces
-import OptionsInterface, { AnimationInterface } from '@/core/interfaces/options';
+import OptionsInterface, {
+  AnimationInterface,
+} from '@/core/interfaces/options';
 import { ExceptionInterface } from '@/core/interfaces/exception';
 
 // Constants
@@ -22,8 +24,8 @@ export default class Core {
   // Event Emitter
   protected _emitter = new EventEmitter();
 
-  // Chart Data 
-  protected _data: DataTable | null = null;
+  // Chart Data
+  protected _data!: DataTable;
 
   // Width of the chart
   protected _width!: number;
@@ -32,31 +34,46 @@ export default class Core {
   protected _height!: number;
 
   // Selected Element
-  protected _element: d3.Selection<HTMLElement, unknown, HTMLElement, any> | null = null;
+  protected _element: d3.Selection<
+    HTMLElement,
+    unknown,
+    HTMLElement,
+    any
+  > | null = null;
 
   /**
    * Chart Wrapper
-   * 
-   * These are the <div> elements appended within the selected element (this._element), 
+   *
+   * These are the <div> elements appended within the selected element (this._element),
    * within which all the charts are drawn.
    */
-  protected _outerWrapper: d3.Selection<HTMLElementTagNameMap['div'], unknown, HTMLElement, any> | null = null;
-  protected _innerWrapper: d3.Selection<HTMLElementTagNameMap['div'], unknown, HTMLElement, any> | null = null;
+  protected _wrapper!: d3.Selection<
+    HTMLElementTagNameMap['div'],
+    unknown,
+    HTMLElement,
+    any
+  >;
+  protected _graph!: d3.Selection<
+    HTMLElementTagNameMap['div'],
+    unknown,
+    HTMLElement,
+    any
+  >;
 
   // Configuration for Chart, Legend & Tooltip
   protected _options: OptionsInterface = {
     chart: {
       // Default Theme
-      theme: new Theme('material')
+      theme: new Theme('material'),
     },
     legend: {
       display: true,
       toggle: true,
       behaviour: 'controllers',
       layout: 'vertical',
-      position: 'right'
+      position: 'right',
     },
-    tooltip: {}
+    tooltip: {},
   };
 
   protected _animation: AnimationInterface | null = null;
@@ -68,20 +85,20 @@ export default class Core {
   protected _preRenderException: ExceptionInterface | null = null;
 
   /**
-   * The `_singleton` variable holds instances of the core classes from Graphifinity 
+   * The `_singleton` variable holds instances of the core classes from Graphifinity
    * and ensures that these instances maintain singleton behavior.
    */
   protected _singleton: {
-    legend: Legend | null 
+    legend: Legend | null;
   } = {
-    legend: null
+    legend: null,
   };
 
   /**
    * This method is used to emit an event for all the errors/exceptions
    * occur in the library.
-   * 
-   * @param exception 
+   *
+   * @param exception
    */
   protected _emitException(exception: ExceptionInterface) {
     setTimeout(() => {
@@ -91,26 +108,35 @@ export default class Core {
 
   /**
    * Used to draw chevron icon.
-   * 
+   *
    * @param element Parent Element
-   * @param width 
-   * @param height 
+   * @param width
+   * @param height
    */
-  protected _chevron(element: d3.Selection<HTMLElement | SVGElement, unknown, HTMLElement, any>, width: number, height: number) {
-    const chevron = element.append('svg')
+  protected _chevron(
+    element: d3.Selection<HTMLElement | SVGElement, unknown, HTMLElement, any>,
+    width: number,
+    height: number
+  ) {
+    const chevron = element
+      .append('svg')
       .attr('width', width)
       .attr('height', height)
       .attr('viewBox', '0 0 16 16');
 
-    chevron.append('path')
+    chevron
+      .append('path')
       .attr('fill-rule', 'evenodd')
-      .attr('d', 'M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z')
+      .attr(
+        'd',
+        'M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'
+      );
 
     return chevron;
   }
 
   /**
-   * This method is employed to verify whether the chart can be rendered without 
+   * This method is employed to verify whether the chart can be rendered without
    * errors or if there is any possibility of encountering an error.
    */
   protected _validate() {
@@ -118,9 +144,8 @@ export default class Core {
       throw new Exception(this._preRenderException);
     } else if (this._element == null) {
       throw new Exception(EXCEPTION.FAILED_ELEMENT_BIND);
-    } else if (this._data == null) {
+    } else if (!this._data) {
       throw new Exception(EXCEPTION.FAILED_DATA_BIND);
     }
   }
 }
-
