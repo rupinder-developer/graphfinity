@@ -12,16 +12,16 @@
     "outDir": "./lib",
     "strictFunctionTypes": true,
     "isolatedModules": true,
-    "declaration":true,
+    "declaration": true,
     "declarationDir": "./lib/types",
     "sourceMap": true,
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     }
   },
   "include": ["./src/**/*", "./global.d.ts"],
   "tsc-alias": {
-    "resolveFullPaths": true,
+    "resolveFullPaths": true
   }
 }

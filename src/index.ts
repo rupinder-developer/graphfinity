@@ -9,7 +9,6 @@ import '@/helpers/exception';
 export { default as DataTable } from '@/helpers/data-table';
 export { default as Theme } from '@/core/theme';
 
-
 /**
  * ******
  * Charts

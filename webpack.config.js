@@ -1,6 +1,6 @@
 import TsconfigPathsPlugin from 'tsconfig-paths-webpack-plugin';
 
-export default function(env) {
+export default function (env) {
   let mode, config;
   if (env.production) {
     // Production Mode (--env production)
@@ -21,7 +21,7 @@ export default function(env) {
       }
     };
   }
-  
+
   return {
     mode,
     entry: ['./src/index.ts'],
