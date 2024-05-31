@@ -4,24 +4,20 @@ import Chart from '@/core/chart';
 export default class Pie extends Chart {
   constructor() {
     super();
+
+    // Default options for Chart
+    this._options.legend.position = 'right';
+    this._options.legend.layout = 'vertical';
   }
 
-  /**
-   * @override
-   *
-   * @returns This method returns a function that is used to re-render the chart.
-   */
   protected _draw() {
-    // Init Legend
+    // Init Legend Class
     const legend = this.init().legend();
 
-    const render = () => {
-      // Set labels for the legend
-      legend._setLabels(this._data.rows.map((row) => `${row[0]}`) || []);
-    };
-
-    render();
-
-    return render;
+    // Setup legend & update chart container
+    this._graph = legend._setup(
+      this._data.rows.map((row) => `${row[0]}`) || [],
+      0.55
+    );
   }
 }

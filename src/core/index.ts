@@ -44,8 +44,7 @@ export default class Core {
   /**
    * Chart Wrapper
    *
-   * These are the <div> elements appended within the selected element (this._element),
-   * within which all the charts are drawn.
+   * <div> element appended within the selected element (this._element),
    */
   protected _wrapper!: d3.Selection<
     HTMLElementTagNameMap['div'],
@@ -53,6 +52,12 @@ export default class Core {
     HTMLElement,
     any
   >;
+
+  /**
+   * Chart Container (where the chart will be drawn)
+   *
+   * <div> element appended within the Chart Wrapper,
+   */
   protected _graph!: d3.Selection<
     HTMLElementTagNameMap['div'],
     unknown,
@@ -70,8 +75,8 @@ export default class Core {
       display: true,
       toggle: true,
       behaviour: 'controllers',
-      layout: 'vertical',
-      position: 'right',
+      layout: 'horizontal',
+      position: 'bottom',
     },
     tooltip: {},
   };

@@ -34,6 +34,9 @@
     const chart = new graphfinity.Pie()
       .element('#chart')
       .bind(data)
+      .legend({
+        position: 'right'
+      })
       .animate();
 
     const render = chart.draw();

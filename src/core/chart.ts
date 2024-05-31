@@ -35,7 +35,7 @@ export default abstract class Chart extends Core {
    *
    * @throws {Exception} - Throws if an error/exception condition is met.
    */
-  protected abstract _draw(): () => void;
+  protected abstract _draw(): void;
 
   /**
    * This method is used to set chart configuration.
@@ -178,15 +178,13 @@ export default abstract class Chart extends Core {
   draw() {
     try {
       this._validate();
-      return this._draw();
+      this._draw();
     } catch (e) {
       if (e instanceof Exception) {
         this._emitException(e.exception);
       } else {
         this._emitException(EXCEPTION.UNKNOWN_EXCEPTION);
       }
-
-      return null;
     }
   }
 
@@ -198,8 +196,9 @@ export default abstract class Chart extends Core {
       legend: () => {
         if (this._singleton.legend === null) {
           this._singleton.legend = new Legend(
-            this._options.legend,
             this._emitter,
+            this._graph,
+            this._options.legend,
             this._options.chart.theme
           );
         }
