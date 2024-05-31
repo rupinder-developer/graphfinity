@@ -108,53 +108,45 @@ export default class Legend {
       any
     > = this._graph.select('div._g_legend_');
 
-    // Create legend container based on its position
-    switch (this._options.position) {
-      case 'left':
-      case 'right':
-        if (!legend.node()) {
-          legend = this._graph.append('div');
-        }
-        legend
-          .style('width', `${100 - areaOffset}%`)
-          .style('height', '100%')
-          .style('float', this._options.position);
-        graph
-          .style('width', `${areaOffset}%`)
-          .style('height', '100%')
-          .style(
-            'float',
-            this._options.position === 'right' ? 'left' : 'right'
-          );
+    /**
+     * ***********************
+     * Create Legend Container
+     * ***********************
+     */
+    if (
+      this._options.position === 'left' ||
+      this._options.position === 'right'
+    ) {
+      if (!legend.node()) {
+        legend = this._graph.append('div');
+      }
+      legend
+        .style('width', `${100 - areaOffset}%`)
+        .style('height', '100%')
+        .style('float', this._options.position);
+      graph
+        .style('width', `${areaOffset}%`)
+        .style('height', '100%')
+        .style('float', this._options.position === 'right' ? 'left' : 'right');
 
-        const clear = this._graph.select('div._g_clear_float');
-        if (!clear.node()) {
-          this._graph
-            .append('div')
-            .attr('class', '_g_clear_float')
-            .style('clear', 'both');
-        }
-        break;
-
-      case 'top':
-        if (!legend.node()) {
-          legend = this._graph.insert('div', ':first-child');
-        }
-        legend
-          .style('width', '100%')
-          .style('max-height', `${100 - areaOffset}%`);
-        graph.style('width', '100%');
-        break;
-
-      case 'bottom':
-        if (!legend.node()) {
-          legend = this._graph.append('div');
-        }
-        legend
-          .style('width', '100%')
-          .style('max-height', `${100 - areaOffset}%`);
-        graph.style('width', '100%');
-        break;
+      if (!this._graph.select('div._g_clear_float').node()) {
+        this._graph
+          .append('div')
+          .attr('class', '_g_clear_float')
+          .style('clear', 'both');
+      }
+    } else if (
+      this._options.position === 'top' ||
+      this._options.position === 'bottom'
+    ) {
+      if (!legend.node()) {
+        legend =
+          this._options.position === 'top'
+            ? this._graph.insert('div', ':first-child')
+            : this._graph.append('div');
+      }
+      legend.style('width', '100%').style('max-height', `${100 - areaOffset}%`);
+      graph.style('width', '100%');
     }
 
     legend.attr('class', '_g_legend_');
