@@ -17,7 +17,7 @@ export default class Pie extends Chart {
     // Setup legend & update chart container
     this._graph = legend._setup(
       this._data.rows.map((row) => `${row[0]}`) || [],
-      0.55
+      0.45
     );
   }
 }

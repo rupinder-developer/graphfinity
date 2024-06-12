@@ -17,7 +17,7 @@ export default class Legend {
     dispatch: (() => void) | null;
   }[] = [];
 
-  // Lagend Container Node
+  // Legend Container Node
   private _node: HTMLElement | null = null;
 
   constructor(
@@ -74,12 +74,12 @@ export default class Legend {
    *
    * @param labels
    * @param areaOffset It is used to indicate how much area is
-   *                   occupied by the chart container, ranging from 0.5 to 0.8.
+   *                   occupied by the legend container, ranging from 0.2 to 0.5.
    *
    * @return Chart Container
    */
-  _setup(labels: string[], areaOffset: number = 0.8) {
-    areaOffset = Math.min(0.8, Math.max(0.5, areaOffset)) * 100;
+  _setup(labels: string[], areaOffset: number = 0.2) {
+    areaOffset = Math.min(0.5, Math.max(0.2, areaOffset)) * 100;
     this._labels = labels.map((label, index) => ({
       value: label,
       fill: this._theme.getColor(index),
@@ -121,11 +121,11 @@ export default class Legend {
         legend = this._graph.append('div');
       }
       legend
-        .style('width', `${100 - areaOffset}%`)
+        .style('width', `${areaOffset}%`)
         .style('height', '100%')
         .style('float', this._options.position);
       graph
-        .style('width', `${areaOffset}%`)
+        .style('width', `${100 - areaOffset}%`)
         .style('height', '100%')
         .style('float', this._options.position === 'right' ? 'left' : 'right');
 
@@ -145,7 +145,7 @@ export default class Legend {
             ? this._graph.insert('div', ':first-child')
             : this._graph.append('div');
       }
-      legend.style('width', '100%').style('max-height', `${100 - areaOffset}%`);
+      legend.style('width', '100%').style('max-height', `${areaOffset}%`);
       graph.style('width', '100%');
     }
 
