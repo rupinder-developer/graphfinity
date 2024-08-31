@@ -8,6 +8,7 @@ export default class Pie extends Chart {
     // Default options for Chart
     this._options.legend.position = 'right';
     this._options.legend.layout = 'vertical';
+    this._options.legend.shape.type = 'circle';
   }
 
   protected _draw() {
@@ -17,7 +18,10 @@ export default class Pie extends Chart {
     // Setup legend & update chart container
     this._graph = legend._setup(
       this._data.rows.map((row) => `${row[0]}`) || [],
-      0.45
+      0.4
     );
+
+    // Draw Legends
+    legend.draw();
   }
 }

@@ -77,6 +77,23 @@ export default class Core {
       behaviour: 'controllers',
       layout: 'horizontal',
       position: 'bottom',
+      alignment: 'center',
+      gap: 5,
+      font: {
+        size: 14,
+        color: '#000',
+      },
+      shape: {
+        type: 'square',
+        size: 15,
+      },
+      controllers: {
+        size: 15,
+        color: {
+          active: '#000',
+          disable: '#ccc',
+        },
+      },
     },
     tooltip: {},
   };
@@ -109,35 +126,6 @@ export default class Core {
     setTimeout(() => {
       this._emitter.emit(EVENT.EXCEPTION, exception);
     }, 0);
-  }
-
-  /**
-   * Used to draw chevron icon.
-   *
-   * @param element Parent Element
-   * @param width
-   * @param height
-   */
-  protected _chevron(
-    element: d3.Selection<HTMLElement | SVGElement, unknown, HTMLElement, any>,
-    width: number,
-    height: number
-  ) {
-    const chevron = element
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .attr('viewBox', '0 0 16 16');
-
-    chevron
-      .append('path')
-      .attr('fill-rule', 'evenodd')
-      .attr(
-        'd',
-        'M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'
-      );
-
-    return chevron;
   }
 
   /**

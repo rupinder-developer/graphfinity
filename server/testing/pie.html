@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pie Chart</title>
   <style>
     #chart {
       margin: 40px auto;
@@ -26,6 +27,7 @@
       ['Task', 'Hours per Day'],
       ['Work', 11],
       ['Eat', 2],
+      ['Work', 11],
       ['Commute', 2],
       ['Watch TV', 2],
       ['Sleep', 7]
@@ -35,10 +37,11 @@
       .element('#chart')
       .bind(data)
       .legend({
-        position: 'top'
+        position: 'right',
       })
       .animate();
 
+    chart.draw();
     chart.draw();
 
     chart.on('exception', (e) => {

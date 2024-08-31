@@ -31,3 +31,8 @@ export const FAILED_DATA_BIND: ExceptionInterface = {
   message:
     'Failed to bind data with the chart. Use the bind() method to bind the data.',
 };
+
+export const FAILED_TO_RENDER_LEGEND: ExceptionInterface = {
+  code: 5,
+  message: 'Something went wrong while rendering legends.',
+};

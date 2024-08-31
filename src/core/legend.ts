@@ -1,9 +1,20 @@
 // Dependencies
+import * as d3 from 'd3';
 import EventEmitter from 'events';
 
 // Requirements
 import { LegendInterface } from '@/core/interfaces/options';
 import Theme from '@/core/theme';
+
+// Constants
+import * as EXCEPTION from '@/core/constants/exception';
+
+// Local Interfaces
+interface Label {
+  value: string;
+  fill: string;
+  dispatch: (() => void) | null;
+}
 
 /**
  * Class Name: Legend
@@ -11,14 +22,19 @@ import Theme from '@/core/theme';
  */
 export default class Legend {
   // Legend Labels
-  private _labels: {
-    value: string;
-    fill: string;
-    dispatch: (() => void) | null;
-  }[] = [];
+  private _labels: Label[] = [];
 
   // Legend Container Node
   private _node: HTMLElement | null = null;
+
+  // Legend Container Styling
+  private _nodeStyling = {
+    padding: {
+      top: 10,
+      bottom: 10,
+      left: 10,
+    },
+  };
 
   constructor(
     // Event Emitter
@@ -66,6 +82,215 @@ export default class Legend {
     if (!this._options.display || !element || this._labels.length === 0) {
       return;
     }
+
+    if (this._options.layout === 'vertical') {
+      this._drawVerticalLegends(element);
+    } else if (this._options.layout === 'horizontal') {
+      this._drawHorizontalLegends(element);
+    }
+  }
+
+  /**
+   * This method is used to draw legends with vertical layout
+   *
+   * @param element
+   */
+  private _drawVerticalLegends(element: HTMLElement) {
+    // Adding styles to legend container
+    const container = d3
+      .select(element)
+      .style('display', 'flex')
+      .style('flex-direction', 'column')
+      .style('justify-content', this._options.alignment)
+      .style('gap', `${this._options.gap}px`)
+      .style('overflow-y', null);
+
+    // Function used to render legends
+    const render = (
+      labels: Label[],
+      visibility = true,
+      controllers = false
+    ) => {
+      // Select all legends within the container
+      const legends = container.selectAll('._g_legend').data(labels);
+
+      // Render each legend
+      const legend = legends
+        .join('div')
+        .attr('class', '_g_legend')
+        .style('visibility', visibility ? 'visible' : 'hidden')
+        .style('display', 'flex')
+        .style('flex-direction', 'row')
+        .style('justify-content', 'start')
+        .style('align-items', 'center')
+        .style('padding-left', `${this._nodeStyling.padding.left}px`)
+        .style('gap', '5px');
+
+      // Add legend shape
+      this._renderLegendShape(legend);
+
+      // Add legend text
+      this._renderLegendText(legend);
+
+      if (controllers) {
+        let controller = container
+          .select<HTMLDivElement>('._g_legend_controllers')
+          .raise();
+
+        if (!controller.node()) {
+          controller = container
+            .append('div')
+            .attr('class', '_g_legend_controllers')
+            .style('display', 'flex')
+            .style('flex-direction', 'row')
+            .style('align-items', 'center')
+            .style('padding-left', `${this._nodeStyling.padding.left}px`);
+
+          // Previous Controller
+          this._chevron(
+            controller,
+            this._options.controllers.size,
+            this._options.controllers.size
+          )
+            .attr('fill', this._options.controllers.color.disable)
+            .attr('transform', 'rotate(-90)')
+            .style('cursor', 'pointer')
+            .style('margin-right', '4px');
+
+          // Next Controller
+          this._chevron(
+            controller,
+            this._options.controllers.size,
+            this._options.controllers.size
+          )
+            .attr('fill', this._options.controllers.color.active)
+            .attr('transform', 'rotate(90)')
+            .style('cursor', 'pointer');
+        }
+      } else if (visibility) {
+        // Remove controllers if not needed
+        container.select('._g_legend_controllers').remove();
+      }
+
+      return legend;
+    };
+
+    /**
+     * **********************
+     * For `scroll` behaviour
+     * **********************
+     */
+    if (this._options.behaviour === 'scroll') {
+      container.style('overflow-y', 'scroll');
+      return render(this._labels);
+    }
+
+    /**
+     * ***************************
+     * For `controllers` behaviour
+     * ***************************
+     */
+
+    // Function to calculate legend height
+    const calculateLegendHeight = () => {
+      // Render dummy legend
+      const dummyLegend = render(
+        [{ value: 'Dummy Legend', fill: '#000', dispatch: null }],
+        false
+      );
+
+      // Calculating height of legend
+      const legendHeight = (
+        dummyLegend.node() as HTMLElement | null
+      )?.getBoundingClientRect().height;
+
+      // Remove dummy legend from the DOM.
+      dummyLegend.remove();
+
+      return legendHeight;
+    };
+
+    const legendHeight = calculateLegendHeight();
+    const containerHeight = container.node()?.getBoundingClientRect().height;
+
+    if (!legendHeight || !containerHeight) {
+      throw new Exception(EXCEPTION.FAILED_TO_RENDER_LEGEND);
+    }
+
+    const isControllers =
+      legendHeight * this._labels.length + this._options.gap > containerHeight;
+
+    render(this._labels, true, true);
+  }
+
+  /**
+   * This method is used to draw legends with horizontal layout
+   *
+   * @param element
+   */
+  private _drawHorizontalLegends(element: HTMLElement) {
+    if (this._options.behaviour === 'controllers') {
+    } else if (this._options.behaviour === 'scroll') {
+    }
+  }
+
+  /**
+   * This method is used to add/render legend shape to each legend item
+   *
+   * @param legend
+   */
+  private _renderLegendShape(
+    legend: d3.Selection<
+      HTMLDivElement | d3.BaseType,
+      Label,
+      HTMLElement,
+      unknown
+    >
+  ) {
+    const shape = legend
+      .selectAll('._g_legend_shape')
+      .data((d) => [d])
+      .join('div')
+      .attr('class', '_g_legend_shape')
+      .style('cursor', 'pointer')
+      .style('width', `${this._options.shape.size}px`)
+      .style('height', `${this._options.shape.size}px`)
+      .style('background-color', (d) => d.fill);
+
+    if (this._options.shape.type === 'circle') {
+      shape.style('border-radius', '50%');
+    } else {
+      // Default Shape (Sqaure)
+      shape.style('border-radius', '5px');
+    }
+  }
+
+  /**
+   * This method is used to add/render legend text to each legend item
+   *
+   * @param legend
+   */
+  private _renderLegendText(
+    legend: d3.Selection<
+      HTMLDivElement | d3.BaseType,
+      Label,
+      HTMLElement,
+      unknown
+    >
+  ) {
+    legend
+      .selectAll('._g_legend_text')
+      .data((d) => [d])
+      .join('div')
+      .attr('class', '_g_legend_text')
+      .style('cursor', 'pointer')
+      .style('color', this._options.font.color)
+      .style('font-size', this._options.font.size)
+      .style('overflow', 'hidden')
+      .style('text-overflow', 'ellipsis')
+      .style('white-space', 'nowrap')
+      .attr('title', (d) => d.value)
+      .text((d) => d.value);
   }
 
   /**
@@ -106,7 +331,7 @@ export default class Legend {
       unknown,
       HTMLElement,
       any
-    > = this._graph.select('div._g_legend_');
+    > = this._graph.select('div._g_legends_');
 
     /**
      * ***********************
@@ -118,11 +343,20 @@ export default class Legend {
       this._options.position === 'right'
     ) {
       if (!legend.node()) {
-        legend = this._graph.append('div');
+        legend = this._graph
+          .append('div')
+          .attr('class', '_g_legends_')
+          .style('padding-top', `${this._nodeStyling.padding.top}px`)
+          .style('padding-bottom', `${this._nodeStyling.padding.bottom}px`);
       }
       legend
         .style('width', `${areaOffset}%`)
-        .style('height', '100%')
+        .style(
+          'height',
+          `calc(100% - ${
+            this._nodeStyling.padding.top + this._nodeStyling.padding.bottom
+          }px)`
+        )
         .style('float', this._options.position);
       graph
         .style('width', `${100 - areaOffset}%`)
@@ -149,10 +383,37 @@ export default class Legend {
       graph.style('width', '100%');
     }
 
-    legend.attr('class', '_g_legend_');
-
     this._node = legend.node();
 
     return graph;
+  }
+
+  /**
+   * Used to draw chevron icon.
+   *
+   * @param element Parent Element
+   * @param width
+   * @param height
+   */
+  private _chevron(
+    element: d3.Selection<HTMLDivElement, unknown, null, undefined>,
+    width: number,
+    height: number
+  ) {
+    const chevron = element
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', '0 0 16 16');
+
+    chevron
+      .append('path')
+      .attr('fill-rule', 'evenodd')
+      .attr(
+        'd',
+        'M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'
+      );
+
+    return chevron;
   }
 }

@@ -2,6 +2,13 @@
 import '@/helpers/exception';
 
 /**
+ * *********
+ * Constants
+ * *********
+ */
+export * as EVENTS from '@/core/constants/event';
+
+/**
  * *******
  * Helpers
  * *******
