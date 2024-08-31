@@ -80,7 +80,7 @@ export default class Core {
       alignment: 'center',
       gap: 5,
       font: {
-        size: 14,
+        size: 16,
         color: '#000',
       },
       shape: {

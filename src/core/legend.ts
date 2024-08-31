@@ -285,7 +285,7 @@ export default class Legend {
       .attr('class', '_g_legend_text')
       .style('cursor', 'pointer')
       .style('color', this._options.font.color)
-      .style('font-size', this._options.font.size)
+      .style('font-size', `${this._options.font.size}px`)
       .style('overflow', 'hidden')
       .style('text-overflow', 'ellipsis')
       .style('white-space', 'nowrap')
