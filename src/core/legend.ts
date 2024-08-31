@@ -133,12 +133,12 @@ export default class Legend {
       this._renderLegendText(legend);
 
       if (controllers) {
-        let controller = container
+        let controllerWrapper = container
           .select<HTMLDivElement>('._g_legend_controllers')
           .raise();
 
-        if (!controller.node()) {
-          controller = container
+        if (!controllerWrapper.node()) {
+          controllerWrapper = container
             .append('div')
             .attr('class', '_g_legend_controllers')
             .style('display', 'flex')
@@ -148,7 +148,7 @@ export default class Legend {
 
           // Previous Controller
           this._chevron(
-            controller,
+            controllerWrapper,
             this._options.controllers.size,
             this._options.controllers.size
           )
@@ -159,7 +159,7 @@ export default class Legend {
 
           // Next Controller
           this._chevron(
-            controller,
+            controllerWrapper,
             this._options.controllers.size,
             this._options.controllers.size
           )
