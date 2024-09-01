@@ -43,7 +43,7 @@ export default abstract class Chart extends Core {
    * @param options
    */
   options(options: Partial<ChartInterface> = {}) {
-    this._options.chart = { ...this._options.chart, ...options };
+    this._options.chart = this._mergeDeep(this._options.chart, options);
 
     return this;
   }
@@ -69,10 +69,7 @@ export default abstract class Chart extends Core {
    * @param options
    */
   legend(options: Partial<LegendInterface> = {}) {
-    this._options.legend = {
-      ...this._options.legend,
-      ...options,
-    } as LegendInterface;
+    this._options.legend = this._mergeDeep(this._options.legend, options);
 
     return this;
   }
@@ -83,10 +80,8 @@ export default abstract class Chart extends Core {
    * @param options
    */
   tooltip(options: Partial<TooltipInterface> = {}) {
-    this._options.tooltip = {
-      ...this._options.tooltip,
-      ...options,
-    };
+    this._options.tooltip = this._mergeDeep(this._options.tooltip, options);
+
     return this;
   }
 

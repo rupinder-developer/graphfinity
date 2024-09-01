@@ -141,4 +141,25 @@ export default class Core {
       throw new Exception(EXCEPTION.FAILED_DATA_BIND);
     }
   }
+
+  /**
+   * Generic method to deeply merge default settings with user-defined options.
+   *
+   * @param target The target object, usually the default settings.
+   * @param source The source object, usually the user-defined options.
+   */
+  protected _mergeDeep<T extends object>(target: T, source: Partial<T>): T {
+    for (const key in source) {
+      if (source[key] instanceof Object && key in target) {
+        target[key] = this._mergeDeep(
+          target[key] as unknown as object,
+          source[key] as object
+        ) as T[Extract<keyof T, string>];
+      } else {
+        target[key] = source[key] as T[Extract<keyof T, string>];
+      }
+    }
+
+    return { ...target };
+  }
 }
