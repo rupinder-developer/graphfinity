@@ -114,6 +114,7 @@ export default class Legend {
           legendsPerPage: number;
           currentPage: number;
           totalPages: number;
+          legendHeight: number;
         };
       } = { visibility: true }
     ) => {
@@ -121,22 +122,24 @@ export default class Legend {
       const isPagination = (config?.pagination?.totalPages ?? 1) > 1;
 
       // Select all legends within the container
-      const legends =
-        isPagination && config.pagination
-          ? container
-              .selectAll('._g_legend')
-              .data(
-                labels.slice(
-                  (config.pagination.currentPage - 1) *
-                    config.pagination.legendsPerPage,
-                  Math.min(
-                    config.pagination.currentPage *
-                      config.pagination.legendsPerPage,
-                    labels.length
-                  )
-                )
-              )
-          : container.selectAll('._g_legend').data(labels);
+      let legends,
+        startIndex = 0,
+        endIndex = labels.length;
+      if (isPagination && config.pagination) {
+        startIndex =
+          (config.pagination.currentPage - 1) *
+          config.pagination.legendsPerPage;
+        endIndex = Math.min(
+          config.pagination.currentPage * config.pagination.legendsPerPage,
+          labels.length
+        );
+
+        legends = container
+          .selectAll('._g_legend')
+          .data(labels.slice(startIndex, endIndex));
+      } else {
+        legends = container.selectAll('._g_legend').data(labels);
+      }
 
       // Render each legend
       const legend = legends
@@ -157,6 +160,19 @@ export default class Legend {
       this._renderLegendText(legend);
 
       if (isPagination && config.pagination) {
+        // Appending empty element
+        const totalLegendsDrawn = endIndex - startIndex;
+        container
+          .selectAll('._g_empty_legend')
+          .data(
+            new Array(
+              Math.max(config.pagination.legendsPerPage - totalLegendsDrawn, 0)
+            )
+          )
+          .join('div')
+          .attr('class', '_g_empty_legend')
+          .style('height', `${legendHeight}px`);
+
         // Removing Controllers if already in DOM
         container.select('._g_legend_controllers').remove();
 
@@ -283,13 +299,12 @@ export default class Legend {
       containerHeight -
       this._nodeStyling.padding.top -
       this._nodeStyling.padding.bottom -
-      this._options.controllers.size -
-      this._options.gap * (this._labels.length - 1);
+      this._options.controllers.size;
 
     // Create configuration of legends
     const currentPage = 1;
     const legendsPerPage = Math.max(
-      Math.floor(spaceAvailable / legendHeight),
+      Math.floor(spaceAvailable / (legendHeight + this._options.gap)),
       1
     );
     const totalPages = Math.ceil(this._labels.length / legendsPerPage);
@@ -301,6 +316,7 @@ export default class Legend {
         legendsPerPage,
         currentPage,
         totalPages,
+        legendHeight,
       },
     });
   }
