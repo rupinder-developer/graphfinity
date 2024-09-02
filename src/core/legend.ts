@@ -119,23 +119,27 @@ export default class Legend {
       } = { visibility: true }
     ) => {
       // Select all legends within the container
-      let legends,
-        startIndex = 0,
-        endIndex = labels.length;
+      let legends: d3.Selection<d3.BaseType, Label, HTMLElement, unknown> =
+        container.selectAll('._g_legend');
+
+      // Init for controllers
+      let startIndex, endIndex;
+
       if (config.pagination && config.pagination.totalPages > 1) {
+        // If pagination is required
         startIndex =
           (config.pagination.currentPage - 1) *
           config.pagination.legendsPerPage;
+
         endIndex = Math.min(
           config.pagination.currentPage * config.pagination.legendsPerPage,
           labels.length
         );
 
-        legends = container
-          .selectAll('._g_legend')
-          .data(labels.slice(startIndex, endIndex));
+        legends = legends.data(labels.slice(startIndex, endIndex));
       } else {
-        legends = container.selectAll('._g_legend').data(labels);
+        // If pagination is not required
+        legends = legends.data(labels);
       }
 
       // Render each legend
@@ -156,10 +160,11 @@ export default class Legend {
       // Add legend text
       this._renderLegendText(legend);
 
-      // Only for `controllers` behaviour
+      // Add controllers if required
       if (config.pagination && config.pagination.totalPages > 1) {
-        // Appending empty element
-        const totalLegendsDrawn = endIndex - startIndex;
+        // Appending empty element only if legendsPerPage > totalLegendsDrawn
+        const totalLegendsDrawn =
+          (endIndex ?? labels.length) - (startIndex ?? 0);
         container
           .selectAll('._g_empty_legend')
           .data(
