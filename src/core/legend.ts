@@ -108,17 +108,41 @@ export default class Legend {
     // Function used to render legends
     const render = (
       labels: Label[],
-      visibility = true,
-      controllers = false
+      config: {
+        visibility: boolean;
+        pagination?: {
+          legendsPerPage: number;
+          currentPage: number;
+          totalPages: number;
+        };
+      } = { visibility: true }
     ) => {
+      // Verify if controllers are required
+      const isPagination = (config?.pagination?.totalPages ?? 1) > 1;
+
       // Select all legends within the container
-      const legends = container.selectAll('._g_legend').data(labels);
+      const legends =
+        isPagination && config.pagination
+          ? container
+              .selectAll('._g_legend')
+              .data(
+                labels.slice(
+                  (config.pagination.currentPage - 1) *
+                    config.pagination.legendsPerPage,
+                  Math.min(
+                    config.pagination.currentPage *
+                      config.pagination.legendsPerPage,
+                    labels.length
+                  )
+                )
+              )
+          : container.selectAll('._g_legend').data(labels);
 
       // Render each legend
       const legend = legends
         .join('div')
         .attr('class', '_g_legend')
-        .style('visibility', visibility ? 'visible' : 'hidden')
+        .style('visibility', config.visibility ? 'visible' : 'hidden')
         .style('display', 'flex')
         .style('flex-direction', 'row')
         .style('justify-content', 'start')
@@ -132,42 +156,79 @@ export default class Legend {
       // Add legend text
       this._renderLegendText(legend);
 
-      if (controllers) {
+      if (isPagination && config.pagination) {
+        // Removing Controllers if already in DOM
+        container.select('._g_legend_controllers').remove();
+
+        // Render Controllers
         let controllerWrapper = container
           .select<HTMLDivElement>('._g_legend_controllers')
           .raise();
 
-        if (!controllerWrapper.node()) {
-          controllerWrapper = container
-            .append('div')
-            .attr('class', '_g_legend_controllers')
-            .style('display', 'flex')
-            .style('flex-direction', 'row')
-            .style('align-items', 'center')
-            .style('padding-left', `${this._nodeStyling.padding.left}px`);
+        controllerWrapper = container
+          .append('div')
+          .attr('class', '_g_legend_controllers')
+          .style('display', 'flex')
+          .style('flex-direction', 'row')
+          .style('align-items', 'center')
+          .style('padding-left', `${this._nodeStyling.padding.left}px`);
 
-          // Previous Controller
-          this._chevron(
-            controllerWrapper,
-            this._options.controllers.size,
-            this._options.controllers.size
+        // Previous Controller
+        this._chevron(
+          controllerWrapper,
+          this._options.controllers.size,
+          this._options.controllers.size
+        )
+          .attr(
+            'fill',
+            config.pagination.currentPage === 1
+              ? this._options.controllers.color.disable
+              : this._options.controllers.color.active
           )
-            .attr('fill', this._options.controllers.color.disable)
-            .attr('transform', 'rotate(-90)')
-            .style('cursor', 'pointer')
-            .style('margin-right', '4px');
+          .attr('transform', 'rotate(-90)')
+          .style('cursor', 'pointer')
+          .style('margin-right', '4px')
+          .on('click', () => {
+            if (config?.pagination && config.pagination.currentPage != 1) {
+              render(this._labels, {
+                ...config,
+                pagination: {
+                  ...config.pagination,
+                  currentPage: config.pagination.currentPage - 1,
+                },
+              });
+            }
+          });
 
-          // Next Controller
-          this._chevron(
-            controllerWrapper,
-            this._options.controllers.size,
-            this._options.controllers.size
+        // Next Controller
+        this._chevron(
+          controllerWrapper,
+          this._options.controllers.size,
+          this._options.controllers.size
+        )
+          .attr(
+            'fill',
+            config.pagination.currentPage === config.pagination.totalPages
+              ? this._options.controllers.color.disable
+              : this._options.controllers.color.active
           )
-            .attr('fill', this._options.controllers.color.active)
-            .attr('transform', 'rotate(90)')
-            .style('cursor', 'pointer');
-        }
-      } else if (visibility) {
+          .attr('transform', 'rotate(90)')
+          .style('cursor', 'pointer')
+          .on('click', () => {
+            if (
+              config?.pagination &&
+              config.pagination.currentPage != config.pagination.totalPages
+            ) {
+              render(this._labels, {
+                ...config,
+                pagination: {
+                  ...config.pagination,
+                  currentPage: config.pagination.currentPage + 1,
+                },
+              });
+            }
+          });
+      } else if (config.visibility) {
         // Remove controllers if not needed
         container.select('._g_legend_controllers').remove();
       }
@@ -196,7 +257,7 @@ export default class Legend {
       // Render dummy legend
       const dummyLegend = render(
         [{ value: 'Dummy Legend', fill: '#000', dispatch: null }],
-        false
+        { visibility: false }
       );
 
       // Calculating height of legend
@@ -217,10 +278,31 @@ export default class Legend {
       throw new Exception(EXCEPTION.FAILED_TO_RENDER_LEGEND);
     }
 
-    const isControllers =
-      legendHeight * this._labels.length + this._options.gap > containerHeight;
+    // Available space in legend container
+    const spaceAvailable =
+      containerHeight -
+      this._nodeStyling.padding.top -
+      this._nodeStyling.padding.bottom -
+      this._options.controllers.size -
+      this._options.gap * (this._labels.length - 1);
 
-    render(this._labels, true, true);
+    // Create configuration of legends
+    const currentPage = 1;
+    const legendsPerPage = Math.max(
+      Math.floor(spaceAvailable / legendHeight),
+      1
+    );
+    const totalPages = Math.ceil(this._labels.length / legendsPerPage);
+
+    // Render Legends
+    render(this._labels, {
+      visibility: true,
+      pagination: {
+        legendsPerPage,
+        currentPage,
+        totalPages,
+      },
+    });
   }
 
   /**

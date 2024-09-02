@@ -9,7 +9,7 @@
     #chart {
       margin: 40px auto;
       width: 400px;
-      height: 300px;
+      height: 140px;
       border: 1px solid black;
       font-family: 'Calibri';
     }
@@ -38,18 +38,9 @@
       .bind(data)
       .legend({
         position: 'right',
-        controllers: {
-          size: 20,
-          color: {
-            test: {
-              a: 'update'
-            }
-          }
-        }
       })
       .animate();
 
-    chart.draw();
     chart.draw();
 
     chart.on('exception', (e) => {

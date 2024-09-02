@@ -152,7 +152,7 @@ export default class Core {
     for (const key in source) {
       if (source[key] instanceof Object && key in target) {
         target[key] = this._mergeDeep(
-          target[key] as unknown as object,
+          target[key] as object,
           source[key] as object
         ) as T[Extract<keyof T, string>];
       } else {
