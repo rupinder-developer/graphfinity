@@ -103,7 +103,7 @@ export default class Legend {
       .style('flex-direction', 'column')
       .style('justify-content', this._options.alignment)
       .style('gap', `${this._options.gap}px`)
-      .style('overflow-y', null);
+      .style('overflow', 'hidden');
 
     // Function used to render legends
     const render = (
@@ -118,14 +118,11 @@ export default class Legend {
         };
       } = { visibility: true }
     ) => {
-      // Verify if controllers are required
-      const isPagination = (config?.pagination?.totalPages ?? 1) > 1;
-
       // Select all legends within the container
       let legends,
         startIndex = 0,
         endIndex = labels.length;
-      if (isPagination && config.pagination) {
+      if (config.pagination && config.pagination.totalPages > 1) {
         startIndex =
           (config.pagination.currentPage - 1) *
           config.pagination.legendsPerPage;
@@ -159,7 +156,8 @@ export default class Legend {
       // Add legend text
       this._renderLegendText(legend);
 
-      if (isPagination && config.pagination) {
+      // Only for `controllers` behaviour
+      if (config.pagination && config.pagination.totalPages > 1) {
         // Appending empty element
         const totalLegendsDrawn = endIndex - startIndex;
         container
@@ -258,8 +256,18 @@ export default class Legend {
      * **********************
      */
     if (this._options.behaviour === 'scroll') {
-      container.style('overflow-y', 'scroll');
-      return render(this._labels);
+      // Render Legends
+      render(this._labels);
+
+      // Check overflow
+      const node = container.node();
+      if (node && node.scrollHeight > node.clientHeight) {
+        container.style('overflow', null);
+        container.style('overflow-y', 'auto');
+        container.style('justify-content', 'flex-start');
+      }
+
+      return;
     }
 
     /**
