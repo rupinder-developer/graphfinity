@@ -536,23 +536,23 @@ export default class Legend {
      * ***************************
      */
 
-    // Function to calculate legend height
+    // Function to calculate row height
     const calculateRowHeight = () => {
-      // Render dummy legend
-      const dummyLegend = render(
+      // Render dummy row with one  Legend
+      const dummyRow = render(
         [{ value: 'Dummy Legend', fill: '#000', dispatch: null }],
         { visibility: false }
       );
 
-      // Calculating height of legend
-      const legendHeight = (
-        dummyLegend.node() as HTMLElement | null
+      // Calculating height of row
+      const rowHeight = (
+        dummyRow.node() as HTMLElement | null
       )?.getBoundingClientRect().height;
 
       // Remove dummy legend from the DOM.
-      dummyLegend.remove();
+      dummyRow.remove();
 
-      return legendHeight;
+      return rowHeight;
     };
 
     // Function to calculate container height
