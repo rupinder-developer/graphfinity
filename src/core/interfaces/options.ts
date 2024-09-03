@@ -18,7 +18,7 @@ interface LegendBase {
   display: boolean;
   toggle: boolean;
   behaviour: 'controllers' | 'scroll';
-  alignment: 'center' | 'start';
+  alignment: 'center' | 'start' | 'space-around' | 'space-between';
   gap: number;
   font: {
     size: number;
