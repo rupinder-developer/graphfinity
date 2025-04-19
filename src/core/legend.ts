@@ -710,6 +710,10 @@ export default class Legend {
     }));
 
     if (!this._options.display) {
+      // Add class to the chart container
+      this._graph.attr('class', '_g_graph_');
+
+      // return the final chart container
       return this._graph;
     }
 
@@ -741,7 +745,7 @@ export default class Legend {
       this._options.position === 'right'
     ) {
       if (!legend.node()) {
-        legend = this._graph.append('div').attr('class', '_g_legends_');
+        legend = this._graph.append('div');
       }
       legend
         .style(
@@ -795,6 +799,7 @@ export default class Legend {
     }
 
     legend
+      .attr('class', '_g_legends_')
       .style('padding-top', `${this._nodeStyling.padding.top}px`)
       .style('padding-bottom', `${this._nodeStyling.padding.bottom}px`)
       .style('padding-left', `${this._nodeStyling.padding.left}px`)
@@ -802,6 +807,7 @@ export default class Legend {
 
     this._node = legend.node();
 
+    // return the final chart container
     return graph;
   }
 
